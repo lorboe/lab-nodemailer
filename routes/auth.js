@@ -92,23 +92,28 @@ router.get("/logout", (req, res) => {
 
 router.get('/confirm/:confirmCode', (req, res, next) => {
 let goodCode = req.params.confirmCode
-User.find({confirmationCode: "goodCode"})
-.then (user => {
+// User.find({confirmationCode: "goodCode"})
 User.update({confirmationCode:"goodCode"},{status:"Active"})
+.then (user => {
+if(user){
+  //req.login connects the user
+req.login(user, () => {
+  res.redirect('/profile')
+})
 console.log("IT WORKS!!!!!!")
-res.render('index')
+// res.render('successActive')
+}
 })
 .catch (error =>{
   next(error)
 })
-}
-  )
 
+})
+  
 
  router.get('/confirm', (req, res, next) => {
 res.render('confirm')
  })
- 
  
 
 module.exports = router;
